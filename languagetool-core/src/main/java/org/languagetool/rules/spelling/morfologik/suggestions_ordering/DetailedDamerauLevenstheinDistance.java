@@ -21,6 +21,7 @@
 
 package org.languagetool.rules.spelling.morfologik.suggestions_ordering;
 
+import java.security.SecureRandom;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
@@ -39,7 +40,7 @@ public final class DetailedDamerauLevenstheinDistance {
     protected final Random random;
 
     public EditOperation() {
-      this.random = new Random();
+      this.random = new SecureRandom();
     }
 
     public EditOperation(long seed) {
@@ -127,7 +128,7 @@ public final class DetailedDamerauLevenstheinDistance {
 
   public static final List<EditOperation> editOperations = Arrays.asList(
     new Insert(), new Replace(), new Transpose(), new Delete());
-  private static final Random random = new Random();
+  private static final Random random = new SecureRandom();
 
   public static final EditOperation randomEdit() {
     return editOperations.get(random.nextInt(editOperations.size()));
