@@ -19,6 +19,7 @@
 package org.languagetool.server;
 
 import com.sun.net.httpserver.HttpExchange;
+import java.security.SecureRandom;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -91,7 +92,7 @@ abstract class TextChecker {
   private final ResultCache cache;
   private final DatabaseLogger databaseLogger;
   private final Long logServerId;
-  private final Random random = new Random();
+  private final Random random = new SecureRandom();
   private final Set<DatabasePingLogEntry> pings = new HashSet<>();
 
   private long pingsCleanDateMillis = System.currentTimeMillis();
