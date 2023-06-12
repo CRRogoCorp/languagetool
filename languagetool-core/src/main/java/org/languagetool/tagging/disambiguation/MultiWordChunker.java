@@ -20,6 +20,7 @@
 package org.languagetool.tagging.disambiguation;
 
 import gnu.trove.THashMap;
+import io.github.pixee.security.BoundedLineReader;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.Nullable;
@@ -270,7 +271,7 @@ public class MultiWordChunker extends AbstractDisambiguator {
     try (BufferedReader reader = new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8))) {
       String line;
       separator = DEFAULT_SEPARATOR;
-      while ((line = reader.readLine()) != null) {
+      while ((line = BoundedLineReader.readLine(reader, 1000000)) != null) {
         line = line.trim();
         if (line.startsWith("#separatorRegExp=")) {
           separator = line.replace("#separatorRegExp=", "");
