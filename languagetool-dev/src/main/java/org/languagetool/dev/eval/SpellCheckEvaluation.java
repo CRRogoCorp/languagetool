@@ -18,6 +18,7 @@
  */
 package org.languagetool.dev.eval;
 
+import io.github.pixee.security.BoundedLineReader;
 import org.languagetool.JLanguageTool;
 import org.languagetool.Language;
 import org.languagetool.Languages;
@@ -59,7 +60,7 @@ public class SpellCheckEvaluation {
       BufferedReader br = new BufferedReader(reader)
     ) {
       String line;
-      while ((line = br.readLine()) != null) {
+      while ((line = BoundedLineReader.readLine(br, 1000000)) != null) {
         List<RuleMatch> matches = lt.check(line);
         for (RuleMatch match : matches) {
           String covered = line.substring(match.getFromPos(), match.getToPos());
