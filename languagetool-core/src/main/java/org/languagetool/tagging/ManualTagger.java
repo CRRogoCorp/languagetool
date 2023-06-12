@@ -19,6 +19,7 @@
 package org.languagetool.tagging;
 
 import gnu.trove.TObjectIntHashMap;
+import io.github.pixee.security.BoundedLineReader;
 import org.apache.commons.lang3.StringUtils;
 import org.languagetool.synthesis.ManualSynthesizer;
 import org.languagetool.tools.StringTools;
@@ -91,7 +92,7 @@ public class ManualTagger implements WordTagger {
       String line;
       int lineCount = 0;
       String separator = DEFAULT_SEPARATOR;
-      while ((line = br.readLine()) != null) {
+      while ((line = BoundedLineReader.readLine(br, 1000000)) != null) {
         line = line.trim();
         lineCount++;
         if (line.startsWith("#separatorRegExp=")) {
