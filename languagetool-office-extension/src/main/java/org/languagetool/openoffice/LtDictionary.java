@@ -18,6 +18,7 @@
  */
 package org.languagetool.openoffice;
 
+import io.github.pixee.security.BoundedLineReader;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -233,7 +234,7 @@ public class LtDictionary {
          BufferedReader br = new BufferedReader(reader)
         ) {
       String line;
-      while ((line = br.readLine()) != null) {
+      while ((line = BoundedLineReader.readLine(br, 1000000)) != null) {
         lines.add(line);
       }
     } catch (IOException e) {
