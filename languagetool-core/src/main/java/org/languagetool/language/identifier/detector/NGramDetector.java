@@ -18,6 +18,7 @@
  */
 package org.languagetool.language.identifier.detector;
 
+import io.github.pixee.security.BoundedLineReader;
 import org.languagetool.language.identifier.LanguageIdentifierService;
 import org.languagetool.noop.NoopLanguage;
 
@@ -53,7 +54,7 @@ public class NGramDetector {
     codes = new ArrayList<>();
     try (BufferedReader br = getReader("iso_codes.tsv")) {
       String line;
-      while ((line = br.readLine()) != null) {
+      while ((line = BoundedLineReader.readLine(br, 1000000)) != null) {
         String[] values = line.split("\t");
         if (values[3].equals("1")) {
           codes.add(values);
@@ -66,7 +67,7 @@ public class NGramDetector {
     try (BufferedReader br = getReader("vocab.txt")) {
       String line;
       int i = 0;
-      while ((line = br.readLine()) != null) {
+      while ((line = BoundedLineReader.readLine(br, 1000000)) != null) {
         vocab.put(line.split("\t")[0].trim(), i);
         i++;
       }
@@ -76,8 +77,8 @@ public class NGramDetector {
     thresholds = new ArrayList<>();
     try (BufferedReader br = getReader("thresholds.txt")) {
       String line;
-      thresholdsStart = Integer.parseInt(br.readLine());
-      while ((line = br.readLine()) != null) {
+      thresholdsStart = Integer.parseInt(BoundedLineReader.readLine(br, 1000000));
+      while ((line = BoundedLineReader.readLine(br, 1000000)) != null) {
         double[] vals = Arrays.stream(line.split(" ")).mapToDouble(Double::parseDouble).toArray();
         thresholds.add(vals);
       }
@@ -140,7 +141,7 @@ public class NGramDetector {
     ArrayList<String> result = new ArrayList<>();
     try (BufferedReader br = getReader(path)) {
       String line;
-      while ((line = br.readLine()) != null) {
+      while ((line = BoundedLineReader.readLine(br, 1000000)) != null) {
         result.add(line);
       }
     } catch(java.io.IOException e) {
