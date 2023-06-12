@@ -19,6 +19,7 @@
 package org.languagetool.rules;
 
 import gnu.trove.THashMap;
+import io.github.pixee.security.BoundedLineReader;
 import org.languagetool.JLanguageTool;
 
 import java.io.*;
@@ -42,7 +43,7 @@ public class WordCoherencyDataLoader {
       BufferedReader br = new BufferedReader(reader)
     ) {
       String line;
-      while ((line = br.readLine()) != null) {
+      while ((line = BoundedLineReader.readLine(br, 1000000)) != null) {
         if (line.isEmpty() || line.charAt(0) == '#') {   // ignore comments
           continue;
         }
