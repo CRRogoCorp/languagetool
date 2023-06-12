@@ -19,6 +19,7 @@
 package org.languagetool.tools;
 
 import com.google.common.xml.XmlEscapers;
+import io.github.pixee.security.BoundedLineReader;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 import org.languagetool.JLanguageTool;
@@ -102,7 +103,7 @@ public final class StringTools {
       }
       try (BufferedReader br = new BufferedReader(isr)) {
         String line;
-        while ((line = br.readLine()) != null) {
+        while ((line = BoundedLineReader.readLine(br, 1000000)) != null) {
           sb.append(line);
           sb.append('\n');
         }
@@ -560,7 +561,7 @@ public final class StringTools {
       BufferedReader br = new BufferedReader(reader)
     ) {
       String line;
-      while ((line = br.readLine()) != null) {
+      while ((line = BoundedLineReader.readLine(br, 1000000)) != null) {
         if (line.isEmpty() || line.charAt(0) == '#') {   // ignore comments
           continue;
         }
