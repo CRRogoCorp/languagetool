@@ -19,6 +19,7 @@
 package org.languagetool.rules.spelling.morfologik;
 
 import com.google.common.cache.*;
+import io.github.pixee.security.BoundedLineReader;
 import morfologik.fsa.FSA;
 import morfologik.fsa.builders.CFSA2Serializer;
 import morfologik.fsa.builders.FSABuilder;
@@ -108,7 +109,7 @@ public class MorfologikMultiSpeller {
             private List<byte[]> getLines(BufferedReader br, String path) throws IOException {
               List<byte[]> lines = new ArrayList<>();
               String line;
-              while ((line = br.readLine()) != null) {
+              while ((line = BoundedLineReader.readLine(br, 1000000)) != null) {
                 if (!line.startsWith("#")) {
                   lines.add(StringUtils.substringBefore(line,"#").trim().getBytes(UTF_8));
                 }
@@ -219,7 +220,7 @@ public class MorfologikMultiSpeller {
   private static List<byte[]> getLines(BufferedReader br) throws IOException {
     List<byte[]> lines = new ArrayList<>();
     String line;
-    while ((line = br.readLine()) != null) {
+    while ((line = BoundedLineReader.readLine(br, 1000000)) != null) {
       if (!line.startsWith("#")) {
         lines.add(line.replaceFirst("#.*", "").trim().getBytes("utf-8"));
       }
