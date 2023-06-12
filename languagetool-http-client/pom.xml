@@ -60,6 +60,10 @@
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>io.github.pixee</groupId>
+            <artifactId>java-security-toolkit</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
@@ -98,21 +102,16 @@
                                 <configuration>
                                     <finalName>ArtificialErrorEval</finalName>
                                     <transformers>
-                                        <transformer
-                                                implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                        <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                             <mainClass>org.languagetool.remote.ArtificialErrorEval</mainClass>
                                         </transformer>
-                                        <transformer
-                                                implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
-                                        <transformer
-                                                implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                                        <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
+                                        <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
                                             <resource>META-INF/org/languagetool/language-module.properties</resource>
                                         </transformer>
-                                        <transformer
-                                                implementation="org.apache.maven.plugins.shade.resource.ApacheLicenseResourceTransformer">
+                                        <transformer implementation="org.apache.maven.plugins.shade.resource.ApacheLicenseResourceTransformer">
                                         </transformer>
-                                        <transformer
-                                                implementation="org.apache.maven.plugins.shade.resource.ApacheNoticeResourceTransformer">
+                                        <transformer implementation="org.apache.maven.plugins.shade.resource.ApacheNoticeResourceTransformer">
                                             <addHeader>false</addHeader>
                                         </transformer>
                                     </transformers>
@@ -142,5 +141,16 @@
             </build>
         </profile>
     </profiles>
-
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>io.github.pixee</groupId>
+                <artifactId>java-security-toolkit</artifactId>
+                <version>${versions.java-security-toolkit}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+    <properties>
+        <versions.java-security-toolkit>1.0.2</versions.java-security-toolkit>
+    </properties>
 </project>
