@@ -18,6 +18,7 @@
  */
 package org.languagetool.rules;
 
+import io.github.pixee.security.BoundedLineReader;
 import org.languagetool.Language;
 import org.languagetool.ShortDescriptionProvider;
 
@@ -48,7 +49,7 @@ public class ConfusionSetLoader {
       BufferedReader br = new BufferedReader(reader)
     ) {
       String line;
-      while ((line = br.readLine()) != null) {
+      while ((line = BoundedLineReader.readLine(br, 1000000)) != null) {
         if (line.startsWith("#") || line.trim().isEmpty()) {
           continue;
         }
