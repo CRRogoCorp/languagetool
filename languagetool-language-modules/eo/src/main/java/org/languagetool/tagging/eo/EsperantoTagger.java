@@ -18,6 +18,7 @@
  */
 package org.languagetool.tagging.eo;
 
+import io.github.pixee.security.BoundedLineReader;
 import org.languagetool.AnalyzedToken;
 import org.languagetool.AnalyzedTokenReadings;
 import org.languagetool.JLanguageTool;
@@ -116,7 +117,7 @@ public class EsperantoTagger implements Tagger {
       BufferedReader br = new BufferedReader(isr)
     ) {
       String line;
-      while ((line = br.readLine()) != null) {
+      while ((line = BoundedLineReader.readLine(br, 1000000)) != null) {
         line = line.trim();
         if (line.isEmpty() || line.charAt(0) == '#') {  // ignore comments
           continue;
