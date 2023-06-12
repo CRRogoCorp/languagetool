@@ -19,6 +19,7 @@
 
 package org.languagetool.bitext;
 
+import io.github.pixee.security.BoundedLineReader;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.BufferedReader;
@@ -52,7 +53,7 @@ public class TabBitextReader implements BitextReader {
       } else {
         in = new BufferedReader(new InputStreamReader(new FileInputStream(filename), encoding));
       }
-      nextLine = in.readLine();
+      nextLine = BoundedLineReader.readLine(in, 1000000);
       prevLine = "";
       nextPair = tab2StringPair(nextLine);
     } catch (IOException e) { 
@@ -91,7 +92,7 @@ public class TabBitextReader implements BitextReader {
         sentencePos = nextPair.getSource().length() + 1;
         if (nextLine != null) {
           prevLine = nextLine;
-          nextLine = in.readLine();
+          nextLine = BoundedLineReader.readLine(in, 1000000);
           nextPair = tab2StringPair(nextLine);
           lineCount++;
           if (nextLine == null) {
