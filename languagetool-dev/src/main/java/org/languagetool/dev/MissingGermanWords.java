@@ -1,5 +1,6 @@
 package org.languagetool.dev;
 
+import io.github.pixee.security.BoundedLineReader;
 import org.languagetool.JLanguageTool;
 import org.languagetool.language.AmericanEnglish;
 import org.languagetool.language.GermanyGerman;
@@ -57,7 +58,7 @@ public class MissingGermanWords {
     System.out.println("# missing words speller");
     BufferedReader reader = getReaderForFilename(filename);
     String line;
-    while ((line = reader.readLine()) != null) {
+    while ((line = BoundedLineReader.readLine(reader, 1000000)) != null) {
       String word = wordFromLine(line);
       if (!isKnownByGermanSpeller(word) && !isKnownByEnglishSpeller(word)) {
         System.out.println(line);
@@ -70,7 +71,7 @@ public class MissingGermanWords {
     System.out.println("# missing words tagger");
     BufferedReader reader = getReaderForFilename(filename);
     String line;
-    while ((line = reader.readLine()) != null) {
+    while ((line = BoundedLineReader.readLine(reader, 1000000)) != null) {
       String word = wordFromLine(line);
       if (!isKnownByGermanTagger(word) && !isKnownByEnglishSpeller(word)) {
         System.out.println(line);
@@ -82,7 +83,7 @@ public class MissingGermanWords {
   private void listMissingWords(String filename) throws java.io.IOException {
     BufferedReader reader = getReaderForFilename(filename);
     String line;
-    while ((line = reader.readLine()) != null) {
+    while ((line = BoundedLineReader.readLine(reader, 1000000)) != null) {
       String word = wordFromLine(line);
       boolean knownBySpeller = isKnownByGermanSpeller(word);
       boolean knownByTagger = isKnownByGermanTagger(word);
