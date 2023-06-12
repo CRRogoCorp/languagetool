@@ -19,6 +19,7 @@
 package org.languagetool.remote;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.github.pixee.security.BoundedLineReader;
 
 import javax.xml.stream.XMLStreamException;
 import java.io.*;
@@ -205,7 +206,7 @@ public class RemoteLanguageTool {
           StringBuilder sb = new StringBuilder();
           try (InputStreamReader isr = new InputStreamReader(inputStream, "utf-8");
                BufferedReader br = new BufferedReader(isr)) {
-            String line = br.readLine();
+            String line = BoundedLineReader.readLine(br, 1000000);
             return Integer.parseInt(line);
           }
         }
@@ -247,7 +248,7 @@ public class RemoteLanguageTool {
     try (InputStreamReader isr = new InputStreamReader(stream, encoding);
          BufferedReader br = new BufferedReader(isr)) {
       String line;
-      while ((line = br.readLine()) != null) {
+      while ((line = BoundedLineReader.readLine(br, 1000000)) != null) {
         sb.append(line).append('\n');
       }
     }
