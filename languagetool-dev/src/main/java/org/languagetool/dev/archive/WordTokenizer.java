@@ -18,6 +18,7 @@
  */
 package org.languagetool.dev.archive;
 
+import io.github.pixee.security.BoundedLineReader;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -50,7 +51,7 @@ public final class WordTokenizer {
     try (BufferedReader in = new BufferedReader(new InputStreamReader(System.in))) {
       out = new BufferedWriter(new OutputStreamWriter(System.out));
       String line;
-      while ((line = in.readLine()) != null) {
+      while ((line = BoundedLineReader.readLine(in, 1000000)) != null) {
         AnalyzedTokenReadings[] atr = lt.getRawAnalyzedSentence(line).
           getTokensWithoutWhitespace();
         for (AnalyzedTokenReadings a : atr) {
