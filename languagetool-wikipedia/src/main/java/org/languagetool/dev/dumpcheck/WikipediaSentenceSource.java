@@ -18,6 +18,7 @@
  */
 package org.languagetool.dev.dumpcheck;
 
+import io.github.pixee.security.XMLInputFactorySecurity;
 import org.languagetool.Language;
 import org.languagetool.dev.wikipedia.SwebleWikipediaTextFilter;
 import org.languagetool.tokenizers.Tokenizer;
@@ -67,7 +68,7 @@ public class WikipediaSentenceSource extends SentenceSource {
     textFilter.enableMapping(false);  // improves performance
     try {
       System.setProperty("jdk.xml.totalEntitySizeLimit", String.valueOf(Integer.MAX_VALUE));  // see https://github.com/dbpedia/extraction-framework/issues/487
-      XMLInputFactory factory = XMLInputFactory.newInstance();
+      XMLInputFactory factory = XMLInputFactorySecurity.hardenFactory(XMLInputFactory.newInstance());
       reader = factory.createXMLEventReader(xmlInput);
       sentenceTokenizer = language.getSentenceTokenizer();
       sentences = new ArrayList<>();
