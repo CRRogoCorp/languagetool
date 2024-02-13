@@ -1097,7 +1097,9 @@ class CompoundTagger {
         	// discard чорний-чорний as noun:anim
         	if( leftAnalyzedToken.getToken().equalsIgnoreCase(rightAnalyzedToken.getToken())
         			&& leftPosTag.contains(TAG_ANIM) && rightPosTag.contains(TAG_ANIM) )
-        		continue;
+        		{
+        		    continue;
+        		}
         	
           String agreedPosTag = getAgreedPosTag(leftPosTag, rightPosTag, leftNv, word);
 
