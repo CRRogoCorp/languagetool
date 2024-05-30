@@ -264,7 +264,7 @@ class CompoundTagger {
 
       for (AnalyzedToken analyzedToken : leftAnalyzedTokens) {
         String posTag = analyzedToken.getPOSTag();
-        if (leftWord.equalsIgnoreCase("як") && posTag != null && posTag.contains("noun") )
+        if ("як".equalsIgnoreCase(leftWord) && posTag != null && posTag.contains("noun") )
           continue;
           
         if( posTag != null
@@ -281,14 +281,14 @@ class CompoundTagger {
 
     // по-болгарськи, по-болгарському
 
-    if( leftWord.equalsIgnoreCase("по") && SKY_PATTERN.matcher(rightWord).matches() ) {
+    if( "по".equalsIgnoreCase(leftWord) && SKY_PATTERN.matcher(rightWord).matches() ) {
       rightWord += "й";
     }
     
     // Пенсильванія-авеню
 
     if( Character.isUpperCase(leftWord.charAt(0)) && LemmaHelper.CITY_AVENU.contains(rightWordLowerCase) ) {
-      String addPos = rightWord.equals("штрассе") ? ":alt" : "";
+      String addPos = "штрассе".equals(rightWord) ? ":alt" : "";
       return PosTagHelper.generateTokensForNv(word, "f", ":prop" + addPos);
     }
 
@@ -353,7 +353,7 @@ class CompoundTagger {
       return ukrainianTagger.asAnalyzedTokenListForTaggedWordsInternal(word, wordList);
     }
 
-    if( leftWord.equals("аль") ) {
+    if( "аль".equals(leftWord) ) {
       String wd = "Аль-" + rightWord;
       List<TaggedWord> wdList = wordTagger.tag(wd);
       if( wdList.size() > 0 ) {
@@ -378,7 +378,7 @@ class CompoundTagger {
       
     }
 
-    if( leftWord.equalsIgnoreCase("по") ) {
+    if( "по".equalsIgnoreCase(leftWord) ) {
       if( rightWord.endsWith("ому") ) {
         return poAdvMatch(word, rightAnalyzedTokens, ADJ_TAG_FOR_PO_ADV_MIS);
       }
@@ -431,7 +431,7 @@ class CompoundTagger {
     // майстер-класу
     
     if( dashPrefixMatch 
-        && ! ( leftWord.equalsIgnoreCase("міді") && LemmaHelper.hasLemma(rightAnalyzedTokens, Arrays.asList("бронза"))) ) {
+        && ! ( "міді".equalsIgnoreCase(leftWord) && LemmaHelper.hasLemma(rightAnalyzedTokens, Arrays.asList("бронза"))) ) {
 
       List<AnalyzedToken> newTokens = new ArrayList<>();
 //      if( leftWord.length() == 1 && leftWord.matches("[a-zA-Zα-ωΑ-Ω]") ) {
@@ -461,7 +461,7 @@ class CompoundTagger {
       }
       
       // топ-десять
-      if( leftWord.equalsIgnoreCase("топ") && PosTagHelper.hasPosTagPart(rightAnalyzedTokens, "numr:") ) {
+      if( "топ".equalsIgnoreCase(leftWord) && PosTagHelper.hasPosTagPart(rightAnalyzedTokens, "numr:") ) {
         return generateTokensWithRighInflected(word, leftWord, rightAnalyzedTokens, "numr:", ":bad", null);
       }
 
@@ -489,7 +489,7 @@ class CompoundTagger {
 
           if( NOUN_SING_V_ROD_REGEX.matcher(rightPosTag).matches() ) {
             for(String vid: PosTagHelper.VIDMINKY_MAP.keySet()) {
-              if( vid.equals("v_kly") )
+              if( "v_kly".equals(vid) )
                 continue;
               String posTag = rightPosTag.replace("v_rod", vid).replaceFirst(":[mfn]:v_", ":p:v_") + ":ua_1992";
               newAnalyzedTokens.add(new AnalyzedToken(word, posTag, word));
@@ -625,7 +625,7 @@ class CompoundTagger {
       }
     }
     else if( set.size() == 1 ) {
-      if( lowerWord.equals("ла") ) {
+      if( "ла".equals(lowerWord) ) {
         return Arrays.asList(new AnalyzedToken(word, "intj", lowerWord));
       }
 
@@ -930,7 +930,7 @@ class CompoundTagger {
           else if( "мм".equals(rightWord) ) {
             for(String gender: PosTagHelper.BASE_GENDERS ) {
               for(String vidm: PosTagHelper.VIDMINKY_MAP.keySet()) {
-                if( vidm.equals("v_kly") )
+                if( "v_kly".equals(vidm) )
                   continue;
 
                 String posTag = IPOSTag.adj.getText() + ":" + gender + ":" + vidm;
@@ -1140,7 +1140,7 @@ class CompoundTagger {
         }
         // noun-numr match
         else if ( IPOSTag.startsWith(leftPosTag, IPOSTag.noun) && IPOSTag.startsWith(rightPosTag, IPOSTag.numr) ) {
-          if( ! leftAnalyzedToken.getLemma().equals("п'ята") ) {
+          if( ! "п'ята".equals(leftAnalyzedToken.getLemma()) ) {
             // gender tags match
             String leftGenderConj = PosTagHelper.getGenderConj(leftPosTag);
             if( leftGenderConj != null && leftGenderConj.equals(PosTagHelper.getGenderConj(rightPosTag)) ) {
@@ -1184,7 +1184,7 @@ class CompoundTagger {
         }
         // чарка-друга
         else if( leftPosTag.startsWith(IPOSTag.noun.getText()) 
-                && rightAnalyzedToken.getLemma().equals("другий")
+                && "другий".equals(rightAnalyzedToken.getLemma())
                 ) {
           String leftGenderConj = PosTagHelper.getGenderConj(leftPosTag);
           if( leftGenderConj != null && leftGenderConj.equals(PosTagHelper.getGenderConj(rightPosTag)) ) {
@@ -1280,8 +1280,8 @@ class CompoundTagger {
   }
 
   private static boolean isMinMax(String rightToken) {
-    return rightToken.equals("максимум")
-        || rightToken.equals("мінімум");
+    return "максимум".equals(rightToken)
+        || "мінімум".equals(rightToken);
   }
 
   @Nullable
