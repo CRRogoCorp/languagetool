@@ -336,7 +336,9 @@ public final class GreekWordTokenizerImpl {
     zzEndRead = zzStartRead;  /* invalidate buffer    */
 
     if (zzReader != null)
-      zzReader.close();
+      {
+          zzReader.close();
+      }
   }
 
 
