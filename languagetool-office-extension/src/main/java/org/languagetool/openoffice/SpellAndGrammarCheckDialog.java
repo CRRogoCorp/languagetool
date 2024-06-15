@@ -18,6 +18,7 @@
  */
 package org.languagetool.openoffice;
 
+import io.github.pixee.security.ZipSecurity;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -2363,7 +2364,7 @@ public class SpellAndGrammarCheckDialog extends Thread {
         throw new IOException("Failed to create directory " + destDirPath);
       }
       byte[] buffer = new byte[1024];
-      try (ZipInputStream zis = new ZipInputStream(new FileInputStream(zipFilePath))) {
+      try (ZipInputStream zis = ZipSecurity.createHardenedInputStream(new FileInputStream(zipFilePath))) {
         ZipEntry zipEntry = zis.getNextEntry();
         while (zipEntry != null) {
           File newFile = new File(destDir, zipEntry.getName());
