@@ -2018,37 +2018,37 @@ public class SpellAndGrammarCheckDialog extends Thread {
           if (debugMode) {
             MessageHandler.printToLogFile("CheckDialog: actionPerformed: Action: " + action.getActionCommand());
           }
-          if (action.getActionCommand().equals("close")) {
+          if ("close".equals(action.getActionCommand())) {
             closeDialog();
-          } else if (action.getActionCommand().equals("more")) {
+          } else if ("more".equals(action.getActionCommand())) {
             Tools.openURL(informationUrl);
-          } else if (action.getActionCommand().equals("options")) {
+          } else if ("options".equals(action.getActionCommand())) {
             documents.runOptionsDialog();
-          } else if (action.getActionCommand().equals("help")) {
+          } else if ("help".equals(action.getActionCommand())) {
             MessageHandler.showMessage(messages.getString("loDialogHelpText"));
           } else {
             Thread t = new Thread(new Runnable() {
               public void run() {
                 try {
-                  if (action.getActionCommand().equals("ignoreOnce")) {
+                  if ("ignoreOnce".equals(action.getActionCommand())) {
                   setAtWorkButtonState();
                   ignoreOnce();
-                  } else if (action.getActionCommand().equals("ignoreAll")) {
+                  } else if ("ignoreAll".equals(action.getActionCommand())) {
                     setAtWorkButtonState();
                     ignoreAll();
-                  } else if (action.getActionCommand().equals("deactivateRule")) {
+                  } else if ("deactivateRule".equals(action.getActionCommand())) {
                     setAtWorkButtonState();
                     deactivateRule();
-                  } else if (action.getActionCommand().equals("change")) {
+                  } else if ("change".equals(action.getActionCommand())) {
                     setAtWorkButtonState();
                     changeText();
-                  } else if (action.getActionCommand().equals("changeAll")) {
+                  } else if ("changeAll".equals(action.getActionCommand())) {
                     setAtWorkButtonState();
                     changeAll();
-                  } else if (action.getActionCommand().equals("autoCorrect")) {
+                  } else if ("autoCorrect".equals(action.getActionCommand())) {
                     setAtWorkButtonState();
                     autoCorrect();
-                  } else if (action.getActionCommand().equals("undo")) {
+                  } else if ("undo".equals(action.getActionCommand())) {
                     setAtWorkButtonState();
                     undo();
                   } else {
@@ -2537,9 +2537,9 @@ public class SpellAndGrammarCheckDialog extends Thread {
         if (debugMode) {
           MessageHandler.printToLogFile("CheckDialog: Undo: Action: " + action);
         }
-        if (action.equals("ignoreOnce")) {
+        if ("ignoreOnce".equals(action)) {
           currentDocument.removeIgnoredMatch(xUndo, yUndo, lastUndo.ruleId, true);
-        } else if (action.equals("ignoreAll")) {
+        } else if ("ignoreAll".equals(action)) {
           if (lastUndo.ruleId.equals(spellRuleId)) {
             if (debugMode) {
               MessageHandler.printToLogFile("CheckDialog: Undo: Ignored word removed: " + wrongWord);
@@ -2552,19 +2552,19 @@ public class SpellAndGrammarCheckDialog extends Thread {
             documents.resetDocument();
             doInit = true;
           }
-        } else if (action.equals("deactivateRule")) {
+        } else if ("deactivateRule".equals(action)) {
           currentDocument.removeResultCache(yUndo);
           Locale locale = docCache.getFlatParagraphLocale(yUndo);
           documents.deactivateRule(lastUndo.ruleId, OfficeTools.localeToString(locale), true);
           doInit = true;
-        } else if (action.equals("activateRule")) {
+        } else if ("activateRule".equals(action)) {
           currentDocument.removeResultCache(yUndo);
           Locale locale = docCache.getFlatParagraphLocale(yUndo);
           documents.deactivateRule(lastUndo.ruleId, OfficeTools.localeToString(locale), false);
           doInit = true;
-        } else if (action.equals("addToDictionary")) {
+        } else if ("addToDictionary".equals(action)) {
           documents.getLtDictionary().removeWordFromDictionary(lastUndo.ruleId, lastUndo.word, xContext);
-        } else if (action.equals("changeLanguage")) {
+        } else if ("changeLanguage".equals(action)) {
           Locale locale = getLocaleFromLanguageName(lastUndo.ruleId);
           FlatParagraphTools flatPara = currentDocument.getFlatParagraphTools();
           int nFlat = lastUndo.y;
@@ -2589,7 +2589,7 @@ public class SpellAndGrammarCheckDialog extends Thread {
             }
           }
           currentDocument.removeResultCache(nFlat);
-        } else if (action.equals("change")) {
+        } else if ("change".equals(action)) {
           Map<Integer, List<Integer>> paras = lastUndo.orgParas;
           short length = (short) lastUndo.ruleId.length();
           for (int nFlat : paras.keySet()) {
