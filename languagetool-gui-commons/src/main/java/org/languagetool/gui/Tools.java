@@ -18,6 +18,7 @@
  */
 package org.languagetool.gui;
 
+import io.github.pixee.security.SystemCommand;
 import org.apache.commons.lang3.StringUtils;
 import org.languagetool.JLanguageTool;
 import org.languagetool.rules.*;
@@ -261,7 +262,7 @@ public final class Tools {
       //handle the case where Desktop.browse() is not supported, e.g. kubuntu
       //without libgnome
       try {
-        Runtime.getRuntime().exec(new String[] { "xdg-open", url.toString() });
+        SystemCommand.runCommand(Runtime.getRuntime(), new String[] { "xdg-open", url.toString() });
       } catch (Exception ex) {
         Tools.showError(ex);
       }
