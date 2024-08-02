@@ -18,6 +18,7 @@
  */
 package org.languagetool.dev.wikipedia;
 
+import static io.github.pixee.security.XMLInputFactorySecurity.hardenFactory;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
@@ -60,7 +61,7 @@ class IpaExtractor {
   }
 
   private void run(FileInputStream fis) throws XMLStreamException {
-    XMLInputFactory factory = XMLInputFactory.newInstance();
+    XMLInputFactory factory = hardenFactory(XMLInputFactory.newInstance());
     XMLEventReader reader = factory.createXMLEventReader(fis);
     String title = null;
     while (reader.hasNext()) {
