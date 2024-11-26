@@ -96,7 +96,7 @@ public class HTTPServerTest {
 
   @Test
   public void translationSuggestions() throws Exception {
-    File configFile = File.createTempFile("translationSuggestions", "txt");
+    File configFile = Files.createTempFile("translationSuggestions", "txt").toFile();
     configFile.deleteOnExit();
 
     File beolingus = new File("../languagetool-standalone/src/test/resources/beolingus_test.txt");

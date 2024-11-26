@@ -19,11 +19,12 @@
 package org.languagetool.tools;
 
 import java.io.File;
+import java.nio.file.Files;
 
 public class DictionaryBuilderTestHelper {
 
   protected File exportDictionaryContents(File file) throws Exception {
-    File outputFile = File.createTempFile(DictionaryExporter.class.getSimpleName(), ".export");
+    File outputFile = Files.createTempFile(DictionaryExporter.class.getSimpleName(), ".export").toFile();
     
     String infoFile = file.toString().replaceAll("\\.dict$", ".info");
     String[] buildOptions = {

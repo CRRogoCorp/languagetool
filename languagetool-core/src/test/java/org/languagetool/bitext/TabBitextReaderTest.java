@@ -19,6 +19,7 @@
 
 package org.languagetool.bitext;
 
+import java.nio.file.Files;
 import org.junit.Test;
 
 import java.io.File;
@@ -35,7 +36,7 @@ public class TabBitextReaderTest {
   @Test
   public void testReader() throws Exception {
     // Create a simple plain text file.
-    File input = File.createTempFile("input", "txt");  
+    File input = Files.createTempFile("input", "txt").toFile();  
     input.deleteOnExit();
 
     // Populate the file with data.

@@ -18,6 +18,7 @@
  */
 package org.languagetool.commandline;
 
+import java.nio.file.Files;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.After;
 import org.junit.Before;
@@ -639,7 +640,7 @@ public class MainTest extends AbstractSecurityTestCase {
   }
 
   private File createTempFile() throws IOException {
-    File input = File.createTempFile(MainTest.class.getName(), ".txt");
+    File input = Files.createTempFile(MainTest.class.getName(), ".txt").toFile();
     input.deleteOnExit();
     return input;
   }
@@ -653,7 +654,7 @@ public class MainTest extends AbstractSecurityTestCase {
   }
 
   private File createTempXMLFile() throws IOException {
-    File input = File.createTempFile("rules-xx-", ".xml");
+    File input = Files.createTempFile("rules-xx-", ".xml").toFile();
     input.deleteOnExit();
     return input;
   }

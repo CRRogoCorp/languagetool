@@ -18,6 +18,7 @@
  */
 package org.languagetool.tools;
 
+import java.nio.file.Files;
 import morfologik.tools.DictDecompile;
 import morfologik.tools.FSADecompile;
 
@@ -61,8 +62,7 @@ final class DictionaryExporter extends DictionaryBuilder {
   
   private void build(File binaryDictFile) throws RuntimeException, IOException {
     String inputPath = binaryDictFile.toString();
-    File tmpOutputFile = File.createTempFile(
-        DictionaryExporter.class.getSimpleName() + "_separator", ".txt");
+    File tmpOutputFile = Files.createTempFile(DictionaryExporter.class.getSimpleName() + "_separator", ".txt").toFile();
     tmpOutputFile.deleteOnExit();
     
     if (inputPath.contains("hunspell") || inputPath.contains("spelling")) {
