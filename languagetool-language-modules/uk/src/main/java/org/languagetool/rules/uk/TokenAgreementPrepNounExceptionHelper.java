@@ -296,7 +296,9 @@ public class TokenAgreementPrepNounExceptionHelper {
       if ( PosTagHelper.hasPosTag(tokens[i], Pattern.compile("noun:(un)?anim:.:v_dav:&pron.*")) ) {
           if( PosTagHelper.hasPosTagStart(tokens[i+1], "adj")
               && CaseGovernmentHelper.hasCaseGovernment(tokens[i+1], "v_dav") )
-          return new RuleException(1);
+          {
+              return new RuleException(1);
+          }
 
           if( tokens.length > i+2
               && PosTagHelper.hasPosTagStart(tokens[i+1], "adv")
