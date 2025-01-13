@@ -22,6 +22,7 @@
 package org.languagetool.rules.spelling;
 
 import com.google.common.cache.*;
+import io.github.pixee.security.ObjectInputFilters;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.languagetool.*;
@@ -284,6 +285,7 @@ public class SymSpellRule extends SpellingCheckRule {
     ByteArrayInputStream inBuffer = new ByteArrayInputStream(outBuffer.toByteArray());
     timeStart = System.currentTimeMillis();
     ObjectInputStream deserializer = new ObjectInputStream(inBuffer);
+    ObjectInputFilters.enableObjectFilterIfUnprotected(deserializer);
     SymSpell speller2 = (SymSpell) deserializer.readObject();
     System.out.printf("Deserializing took %d ms.%n", System.currentTimeMillis() - timeStart);
     deserializer.close();
