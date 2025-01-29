@@ -21,6 +21,7 @@
 
 package org.languagetool.dev;
 
+import java.nio.file.Files;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.Options;
@@ -88,7 +89,7 @@ public class RuleDetails {
     CSVFormat format = CSVFormat.RFC4180.withFirstRecordAsHeader();
 
     try (CSVParser parser = CSVParser.parse(new File(inputFile), Charset.defaultCharset(), format)) {
-      try (CSVPrinter printer = new CSVPrinter(new BufferedWriter(new FileWriter(outputFile)), format)) {
+      try (CSVPrinter printer = new CSVPrinter(Files.newBufferedWriter(outputFile.toPath()), format)) {
         Map<String, Integer> oldHeader = parser.getHeaderMap();
         List<String> newHeader = new ArrayList<>(Collections.nCopies(oldHeader.size(), null));
 
