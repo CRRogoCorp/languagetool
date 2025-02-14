@@ -18,6 +18,7 @@
  */
 package org.languagetool.dev;
 
+import static io.github.pixee.security.XMLInputFactorySecurity.hardenFactory;
 import org.languagetool.Language;
 import org.languagetool.Languages;
 
@@ -38,7 +39,7 @@ class XmlUsageCounter {
   private final Map<String,Integer> map = new HashMap<>();
 
   private void countElementsAndAttributes(InputStream in) throws XMLStreamException {
-    XMLInputFactory inputFactory = XMLInputFactory.newInstance();
+    XMLInputFactory inputFactory = hardenFactory(XMLInputFactory.newInstance());
     XMLEventReader eventReader = inputFactory.createXMLEventReader(in);
     while (eventReader.hasNext()) {
       XMLEvent event = eventReader.nextEvent();
