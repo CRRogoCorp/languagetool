@@ -24,6 +24,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
@@ -81,7 +82,7 @@ final class SpellDictionaryBuilder extends DictionaryBuilder {
 //    Tokenizer wordTokenizer = language.getWordTokenizer();
     String encoding = getOption("fsa.dict.encoding");
     String separatorChar = hasOption("fsa.dict.separator") ? getOption("fsa.dict.separator") : "";
-    File tempFile = File.createTempFile(SpellDictionaryBuilder.class.getSimpleName(), ".txt");
+    File tempFile = Files.createTempFile(SpellDictionaryBuilder.class.getSimpleName(), ".txt").toFile();
     tempFile.deleteOnExit();
 
     try (Scanner scanner = new Scanner(plainTextDictFile, encoding)) {
