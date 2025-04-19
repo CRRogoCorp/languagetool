@@ -18,6 +18,7 @@
  */
 package org.languagetool.commandline;
 
+import io.github.pixee.security.BoundedLineReader;
 import org.apache.commons.io.ByteOrderMark;
 import org.apache.commons.io.input.BOMInputStream;
 import org.languagetool.*;
@@ -227,7 +228,7 @@ class Main {
       ) {
         String line;
         int lineCount = 0;
-        while ((line = br.readLine()) != null) {
+        while ((line = BoundedLineReader.readLine(br, 5_000_000)) != null) {
           sb.append(line);
           lineCount++;
           // to detect language from the first input line

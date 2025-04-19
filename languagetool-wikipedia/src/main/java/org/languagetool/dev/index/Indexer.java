@@ -18,6 +18,7 @@
  */
 package org.languagetool.dev.index;
 
+import io.github.pixee.security.BoundedLineReader;
 import java.io.*;
 import java.util.HashMap;
 import java.util.List;
@@ -133,7 +134,7 @@ public class Indexer implements AutoCloseable {
   public void indexSentence(Sentence sentence, int docCount) throws IOException {
     BufferedReader reader = new BufferedReader(new StringReader(sentence.getText()));
     String line;
-    while ((line = reader.readLine()) != null) {
+    while ((line = BoundedLineReader.readLine(reader, 5_000_000)) != null) {
       add(line, sentence.getSource(), sentence.getTitle(), docCount);
     }
   }
@@ -143,7 +144,7 @@ public class Indexer implements AutoCloseable {
     StringBuilder paragraph = new StringBuilder();
     int i = 0;
     int addCount = 0;
-    while ((line = reader.readLine()) != null) {
+    while ((line = BoundedLineReader.readLine(reader, 5_000_000)) != null) {
       if (!(line.equals("")) && paragraph.length() + line.length() < Integer.MAX_VALUE) {
         paragraph.append(line).append('\n');
       } else {

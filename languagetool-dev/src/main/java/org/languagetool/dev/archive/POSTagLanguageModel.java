@@ -19,6 +19,7 @@
 
 package org.languagetool.dev.archive;
 
+import io.github.pixee.security.BoundedLineReader;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -78,7 +79,7 @@ public final class POSTagLanguageModel {
       isr = new InputStreamReader(new BufferedInputStream(System.in));
       br = new BufferedReader(isr);
       String line;
-      while ((line = br.readLine()) != null) {
+      while ((line = BoundedLineReader.readLine(br, 5_000_000)) != null) {
         sb.append(line);
         sb.append('\n');
         if (lt.getLanguage().getSentenceTokenizer().singleLineBreaksMarksPara()) {

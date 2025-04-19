@@ -19,6 +19,7 @@
 package org.languagetool.dev;
 
 import de.danielnaber.jwordsplitter.GermanWordSplitter;
+import io.github.pixee.security.BoundedLineReader;
 import org.languagetool.JLanguageTool;
 import org.languagetool.language.GermanyGerman;
 import org.languagetool.rules.de.GermanSpellerRule;
@@ -57,7 +58,7 @@ public class MissingGermanCompoundsFinder {
     String line;
     GermanWordSplitter splitter = new GermanWordSplitter(false);
     Map<String,Integer> firstPartCount = new HashMap<>();
-    while ((line = reader.readLine()) != null) {
+    while ((line = BoundedLineReader.readLine(reader, 5_000_000)) != null) {
       String word;
       int count;
       if (line.contains("\t")) {

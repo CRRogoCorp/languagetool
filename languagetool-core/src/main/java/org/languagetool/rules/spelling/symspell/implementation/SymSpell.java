@@ -21,6 +21,7 @@ package org.languagetool.rules.spelling.symspell.implementation;
 //        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //        SOFTWARE.
 
+import io.github.pixee.security.BoundedLineReader;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -228,7 +229,7 @@ public class SymSpell implements Serializable {
 
     SuggestionStage staging = new SuggestionStage(16384);
     try {
-      for (String line; (line = br.readLine()) != null; ) {
+      for (String line; (line = BoundedLineReader.readLine(br, 5_000_000)) != null; ) {
         String[] lineParts = line.split("\\s");
         if (lineParts.length >= 2) {
           String key = lineParts[termIndex];
@@ -264,7 +265,7 @@ public class SymSpell implements Serializable {
 
     SuggestionStage staging = new SuggestionStage(16384);
     try (BufferedReader br = Files.newBufferedReader(Paths.get(corpus))) {
-      for (String line; (line = br.readLine()) != null; ) {
+      for (String line; (line = BoundedLineReader.readLine(br, 5_000_000)) != null; ) {
         Arrays.stream(parseWords(line)).forEach(key -> createDictionaryEntry(key, 1, staging));
       }
     } catch (IOException ex) {

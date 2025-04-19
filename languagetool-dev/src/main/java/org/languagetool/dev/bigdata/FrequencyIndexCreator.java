@@ -18,6 +18,7 @@
  */
 package org.languagetool.dev.bigdata;
 
+import io.github.pixee.security.BoundedLineReader;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.*;
@@ -187,7 +188,7 @@ public class FrequencyIndexCreator {
       long startTime = System.nanoTime()/1000;
       String line;
       //noinspection NestedAssignment
-      while ((line = buffered.readLine()) != null) {
+      while ((line = BoundedLineReader.readLine(buffered, 5_000_000)) != null) {
         lineCount++;
         // To create a smaller index just for testing, comment in this. For there/their
         // with the v1 Google ngram data, the index will be 110MB (instead of 3.1GB with all words):

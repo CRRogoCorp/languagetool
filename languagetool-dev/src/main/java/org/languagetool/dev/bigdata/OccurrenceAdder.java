@@ -18,6 +18,7 @@
  */
 package org.languagetool.dev.bigdata;
 
+import io.github.pixee.security.BoundedLineReader;
 import org.apache.commons.io.IOUtils;
 
 import java.io.*;
@@ -49,7 +50,7 @@ public class OccurrenceAdder {
       BufferedReader buffered = new BufferedReader(decoder, BUFFER_SIZE)
     ) {
       String line;
-      while ((line = buffered.readLine()) != null) {
+      while ((line = BoundedLineReader.readLine(buffered, 5_000_000)) != null) {
         String[] parts = line.split("\t");
         String word = parts[0];
         int occurrences = Integer.parseInt(parts[2]);

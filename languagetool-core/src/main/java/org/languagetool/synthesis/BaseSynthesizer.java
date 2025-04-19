@@ -18,6 +18,7 @@
  */
 package org.languagetool.synthesis;
 
+import io.github.pixee.security.BoundedLineReader;
 import morfologik.stemming.Dictionary;
 import morfologik.stemming.DictionaryLookup;
 import morfologik.stemming.IStemmer;
@@ -160,7 +161,7 @@ public class BaseSynthesizer implements Synthesizer {
       BufferedReader f = new BufferedReader(new InputStreamReader(url.openStream(), StandardCharsets.UTF_8));
       StringBuilder sb = new StringBuilder();
       String line;
-      while ((line = f.readLine()) != null) {
+      while ((line = BoundedLineReader.readLine(f, 5_000_000)) != null) {
         sb.append(line);
         sb.append('\n');
       }
@@ -178,7 +179,7 @@ public class BaseSynthesizer implements Synthesizer {
       BufferedReader f = new BufferedReader(new InputStreamReader(url.openStream(), StandardCharsets.UTF_8));
       StringBuilder sb = new StringBuilder();
       String line;
-      while ((line = f.readLine()) != null) {
+      while ((line = BoundedLineReader.readLine(f, 5_000_000)) != null) {
         sb.append(line);
         sb.append('\n');
       }

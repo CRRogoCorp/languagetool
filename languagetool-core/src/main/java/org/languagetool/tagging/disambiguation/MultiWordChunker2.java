@@ -19,6 +19,7 @@
 
 package org.languagetool.tagging.disambiguation;
 
+import io.github.pixee.security.BoundedLineReader;
 import org.apache.commons.lang3.StringUtils;
 import org.languagetool.AnalyzedSentence;
 import org.languagetool.AnalyzedToken;
@@ -231,7 +232,7 @@ public class MultiWordChunker2 extends AbstractDisambiguator {
     List<String> lines = new ArrayList<>();
     try (BufferedReader reader = new BufferedReader(new InputStreamReader(stream, "UTF-8"))) {
       String line;
-      while ((line = reader.readLine()) != null) {
+      while ((line = BoundedLineReader.readLine(reader, 5_000_000)) != null) {
         line = line.trim();
         if (line.isEmpty() || line.charAt(0) == '#') {  // ignore comments
           continue;

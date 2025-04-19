@@ -18,6 +18,7 @@
  */
 package org.languagetool.broker;
 
+import io.github.pixee.security.BoundedLineReader;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.languagetool.JLanguageTool;
@@ -153,7 +154,7 @@ public class DefaultResourceDataBroker implements ResourceDataBroker {
          BufferedReader br = new BufferedReader(reader)
     ) {
       String line;
-      while ((line = br.readLine()) != null) {
+      while ((line = BoundedLineReader.readLine(br, 5_000_000)) != null) {
         lines.add(line);
       }
     } catch (IOException e) {

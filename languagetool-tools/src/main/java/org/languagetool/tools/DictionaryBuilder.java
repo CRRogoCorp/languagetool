@@ -18,6 +18,7 @@
  */
 package org.languagetool.tools;
 
+import io.github.pixee.security.BoundedLineReader;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -131,7 +132,7 @@ class DictionaryBuilder {
       BufferedReader br = new BufferedReader(reader)
     ) {
       String line;
-      while ((line = br.readLine()) != null) {
+      while ((line = BoundedLineReader.readLine(br, 5_000_000)) != null) {
         Matcher m = pFreqEntry.matcher(line);
         if (m.matches()) {
           freqList.put(m.group(3), Integer.parseInt(m.group(1)));
@@ -160,7 +161,7 @@ class DictionaryBuilder {
       String line;
       int maxFreq = Collections.max(freqList.values());
       double maxFreqLog = Math.log(maxFreq);
-      while ((line = br.readLine()) != null) {
+      while ((line = BoundedLineReader.readLine(br, 5_000_000)) != null) {
         Matcher m = pTaggerEntry.matcher(line);
         if (m.matches()) {
           int freq = 0;
