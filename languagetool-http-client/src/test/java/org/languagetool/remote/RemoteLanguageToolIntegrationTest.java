@@ -18,6 +18,8 @@
  */
 package org.languagetool.remote;
 
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.languagetool.server.HTTPSServer;
@@ -59,7 +61,7 @@ public class RemoteLanguageToolIntegrationTest {
     HTTPServer server = new HTTPServer(config);
     try {
       server.run();
-      RemoteLanguageTool lt = new RemoteLanguageTool(new URL(serverUrl));
+      RemoteLanguageTool lt = new RemoteLanguageTool(Urls.create(serverUrl, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS));
       assertThat(lt.check("This is a correct sentence.", "en").getMatches().size(), is(0));
       assertThat(lt.check("Sentence wiht a typo not detected.", "en").getMatches().size(), is(0));
       assertThat(lt.check("Sentence wiht a typo detected.", "en-US").getMatches().size(), is(1));
@@ -118,7 +120,7 @@ public class RemoteLanguageToolIntegrationTest {
     HTTPSServer server = new HTTPSServer(config, false, "localhost", Collections.singleton("127.0.0.1"));
     try {
       server.run();
-      RemoteLanguageTool lt = new RemoteLanguageTool(new URL(serverUrl.replace("http:", "https:")));
+      RemoteLanguageTool lt = new RemoteLanguageTool(Urls.create(serverUrl.replace("http:", "https:"), Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS));
       assertThat(lt.check("This is a correct sentence.", "en").getMatches().size(), is(0));
     } finally {
       server.stop();
@@ -152,14 +154,14 @@ public class RemoteLanguageToolIntegrationTest {
   @Test(expected=RuntimeException.class)
   public void testWrongProtocol() throws MalformedURLException {
     String httpsUrl = "https://" + HTTPServerConfig.DEFAULT_HOST + ":" + HTTPServerConfig.DEFAULT_PORT;
-    RemoteLanguageTool lt = new RemoteLanguageTool(new URL(httpsUrl));
+    RemoteLanguageTool lt = new RemoteLanguageTool(Urls.create(httpsUrl, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS));
     lt.check("foo", "en");
   }
 
   @Test(expected=RuntimeException.class)
   public void testInvalidProtocol() throws MalformedURLException {
     String httpsUrl = "ftp://" + HTTPServerConfig.DEFAULT_HOST + ":" + HTTPServerConfig.DEFAULT_PORT;
-    RemoteLanguageTool lt = new RemoteLanguageTool(new URL(httpsUrl));
+    RemoteLanguageTool lt = new RemoteLanguageTool(Urls.create(httpsUrl, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS));
     lt.check("foo", "en");
   }
   
@@ -167,7 +169,7 @@ public class RemoteLanguageToolIntegrationTest {
   @Test(expected=MalformedURLException.class)
   public void testProtocolTypo() throws MalformedURLException {
     String httpsUrl = "htp://" + HTTPServerConfig.DEFAULT_HOST + ":" + HTTPServerConfig.DEFAULT_PORT;
-    new RemoteLanguageTool(new URL(httpsUrl));
+    new RemoteLanguageTool(Urls.create(httpsUrl, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS));
   }
   
 }

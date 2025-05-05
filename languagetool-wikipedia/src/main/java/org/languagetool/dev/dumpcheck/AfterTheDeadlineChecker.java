@@ -18,6 +18,8 @@
  */
 package org.languagetool.dev.dumpcheck;
 
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import org.languagetool.Language;
 import org.languagetool.Languages;
 import org.languagetool.tools.StringTools;
@@ -81,7 +83,7 @@ class AfterTheDeadlineChecker {
 
   private String queryAtDServer(String text) {
     try {
-      URL url = new URL(urlPrefix + URLEncoder.encode(text, "UTF-8"));
+      URL url = Urls.create(urlPrefix + URLEncoder.encode(text, "UTF-8"), Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
       InputStream contentStream = (InputStream) url.getContent();
       return StringTools.streamToString(contentStream, "UTF-8");
     } catch (Exception e) {

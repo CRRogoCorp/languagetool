@@ -19,6 +19,8 @@
 package org.languagetool.rules.fr;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import org.jetbrains.annotations.NotNull;
 import org.languagetool.AnalyzedSentence;
 import org.languagetool.GlobalConfig;
@@ -447,7 +449,7 @@ public class GrammalecteRule extends Rule {
       return new RuleMatch[0];
     }
 
-    URL serverUrl = new URL(globalConfig.getGrammalecteServer());
+    URL serverUrl = Urls.create(globalConfig.getGrammalecteServer(), Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
     HttpURLConnection huc = (HttpURLConnection) serverUrl.openConnection();
     HttpURLConnection.setFollowRedirects(false);
     huc.setConnectTimeout(TIMEOUT_MILLIS);
