@@ -18,6 +18,7 @@
  */
 package org.languagetool.dev;
 
+import io.github.pixee.security.SystemCommand;
 import java.io.File;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
@@ -77,7 +78,7 @@ final class RuleActivityOverview {
         }
         String command = "git log --after=" + pastString + " " + file;
         Runtime runtime = Runtime.getRuntime();
-        Process process = runtime.exec(command);
+        Process process = SystemCommand.runCommand(runtime, command);
         InputStream inputStream = process.getInputStream();
         String output = StringTools.readStream(inputStream, "utf-8");
         process.waitFor();
