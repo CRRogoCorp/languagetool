@@ -18,6 +18,7 @@
  */
 package org.languagetool.tools;
 
+import java.nio.file.Files;
 import org.apache.commons.cli.CommandLine;
 import org.jetbrains.annotations.Nullable;
 
@@ -64,7 +65,7 @@ final class SynthDictionaryBuilder extends DictionaryBuilder {
   File build(File plainTextDictFile, File infoFile) throws Exception {
     String outputFilename = this.getOutputFilename();
     File outputDirectory = new File(outputFilename).getParentFile();
-    File tempFile = File.createTempFile(SynthDictionaryBuilder.class.getSimpleName(), ".txt", outputDirectory);
+    File tempFile = Files.createTempFile(outputDirectory.toPath(), SynthDictionaryBuilder.class.getSimpleName(), ".txt").toFile();
     File reversedFile = null;
     try {
       Set<String> itemsToBeIgnored = getIgnoreItems(new File(infoFile.getParent(), "filter-archaic.txt"));
@@ -113,7 +114,7 @@ final class SynthDictionaryBuilder extends DictionaryBuilder {
   }
 
   private File reverseLineContent(File plainTextDictFile, Set<String> itemsToBeIgnored, Pattern ignorePosRegex) throws IOException {
-    File reversedFile = File.createTempFile(SynthDictionaryBuilder.class.getSimpleName() + "_reversed", ".txt");
+    File reversedFile = Files.createTempFile(SynthDictionaryBuilder.class.getSimpleName() + "_reversed", ".txt").toFile();
     reversedFile.deleteOnExit();
 
     String separator = getOption("fsa.dict.separator");

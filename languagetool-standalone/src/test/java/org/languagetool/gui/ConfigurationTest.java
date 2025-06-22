@@ -36,7 +36,7 @@ public class ConfigurationTest {
 
   @Test
   public void testSaveAndLoadConfiguration() throws Exception {
-    File tempFile = File.createTempFile(ConfigurationTest.class.getSimpleName(), ".cfg");
+    File tempFile = Files.createTempFile(ConfigurationTest.class.getSimpleName(), ".cfg").toFile();
     createConfiguration(tempFile, null);
     try {
       Configuration conf = new Configuration(tempFile.getParentFile(), tempFile.getName(), null);
@@ -61,7 +61,7 @@ public class ConfigurationTest {
 
   @Test
   public void testSaveAndLoadConfigurationForManyLanguages() throws Exception {
-    File tempFile = File.createTempFile(ConfigurationTest.class.getSimpleName(), ".cfg");
+    File tempFile = Files.createTempFile(ConfigurationTest.class.getSimpleName(), ".cfg").toFile();
     createConfiguration(tempFile, new AmericanEnglish());
     try {
       Configuration conf = new Configuration(tempFile.getParentFile(), tempFile.getName(),
