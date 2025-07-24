@@ -18,6 +18,7 @@
  */
 package org.languagetool.dev.eval;
 
+import io.github.pixee.security.BoundedLineReader;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
@@ -69,7 +70,7 @@ public class ConfusionPairEvaluator {
     try (InputStreamReader isr = getInputStreamReader(filename, encoding);
         BufferedReader br = new BufferedReader(isr)) {
       String line;
-      while ((line = br.readLine()) != null) {
+      while ((line = BoundedLineReader.readLine(br, 5_000_000)) != null) {
         List<String> sentencesLine = lt.sentenceTokenize(line);
         for (String sentence : sentencesLine) {
           List<String> tokens = lang.getWordTokenizer().tokenize(sentence);

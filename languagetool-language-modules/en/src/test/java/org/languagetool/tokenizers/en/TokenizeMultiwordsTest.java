@@ -19,6 +19,7 @@
 
 package org.languagetool.tokenizers.en;
 
+import io.github.pixee.security.BoundedLineReader;
 import org.junit.Test;
 import org.languagetool.JLanguageTool;
 
@@ -81,7 +82,7 @@ public class TokenizeMultiwordsTest {
     List<String> lines = new ArrayList<>();
     try (BufferedReader reader = new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8))) {
       String line;
-      while ((line = reader.readLine()) != null) {
+      while ((line = BoundedLineReader.readLine(reader, 5_000_000)) != null) {
         line = line.trim();
         line = line.replaceFirst("#.*", "").trim();
         if (line.isEmpty() || line.charAt(0) == '#') { // ignore comments

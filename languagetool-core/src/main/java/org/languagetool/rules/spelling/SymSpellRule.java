@@ -22,6 +22,7 @@
 package org.languagetool.rules.spelling;
 
 import com.google.common.cache.*;
+import io.github.pixee.security.BoundedLineReader;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.languagetool.*;
@@ -101,7 +102,7 @@ public class SymSpellRule extends SpellingCheckRule {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(
           broker.getFromResourceDirAsStream(resource)))) {
           String line;
-          while ((line = reader.readLine()) != null) {
+          while ((line = BoundedLineReader.readLine(reader, 5_000_000)) != null) {
             function.accept(line);
           }
         } catch (IOException e) {

@@ -18,6 +18,7 @@
  */
 package org.languagetool.rules.br;
 
+import io.github.pixee.security.BoundedLineReader;
 import org.languagetool.AnalyzedSentence;
 import org.languagetool.AnalyzedTokenReadings;
 import org.languagetool.JLanguageTool;
@@ -117,7 +118,7 @@ public class TopoReplaceRule extends Rule {
       String line;
 
       Tokenizer wordTokenizer = new Breton().getWordTokenizer();
-      while ((line = br.readLine()) != null) {
+      while ((line = BoundedLineReader.readLine(br, 5_000_000)) != null) {
         line = line.trim();
         if (line.isEmpty() || line.charAt(0) == '#') { // ignore comments
           continue;
