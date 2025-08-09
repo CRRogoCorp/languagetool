@@ -20,6 +20,8 @@ package org.languagetool.rules.en;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Sets;
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import org.apache.commons.text.similarity.LevenshteinDistance;
 import org.jetbrains.annotations.Nullable;
 import org.languagetool.*;
@@ -185,7 +187,7 @@ public abstract class AbstractEnglishSpellerRule extends MorfologikSpellerRule {
         for (int i = 0; i < maxPatterns; i++) {
           Matcher m = wordPatterns[i].matcher(misspelledWord);
           if (m.matches()) {
-            match.setUrl(new URL(blogLinks[i]));
+            match.setUrl(Urls.create(blogLinks[i], Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS));
             break;
           }
         }  

@@ -20,6 +20,8 @@
  */
 package org.languagetool.rules;
 
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.languagetool.AnalyzedSentence;
@@ -113,7 +115,7 @@ public abstract class AbstractUnitConversionRule extends Rule {
   private URL buildURLForExplanation(String original) {
     try {
       String query = URLEncoder.encode("convert " + original + " to metric", "utf-8");
-      return new URL("http://www.wolframalpha.com/input/?i=" + query);
+      return Urls.create("http://www.wolframalpha.com/input/?i=" + query, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
     } catch (Exception e) {
       return null;
     }

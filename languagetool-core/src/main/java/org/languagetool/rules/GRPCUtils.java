@@ -1,5 +1,7 @@
 package org.languagetool.rules;
 
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -188,7 +190,7 @@ public final class GRPCUtils
 
     if (!m.getUrl().isEmpty()) {
       try {
-        r.setUrl(new URL(m.getUrl()));
+        r.setUrl(Urls.create(m.getUrl(), Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS));
       } catch (MalformedURLException e) {
         log.warn("Got invalid URL from GRPC match filter: {}", e);
       }

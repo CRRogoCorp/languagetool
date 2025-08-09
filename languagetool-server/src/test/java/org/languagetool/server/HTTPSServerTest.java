@@ -18,6 +18,8 @@
  */
 package org.languagetool.server;
 
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import org.junit.Before;
 import org.junit.Test;
 import org.languagetool.Language;
@@ -76,7 +78,7 @@ public class HTTPSServerTest {
       server.run();
 
       HashMap<String, String> map = new HashMap<>();
-      URL url = new URL("https://localhost:" + HTTPTestTools.getDefaultPort() + "/v2/check");
+      URL url = Urls.create("https://localhost:" + HTTPTestTools.getDefaultPort() + "/v2/check", Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
       try {
         map.put("Referer", "http://foo.org/myref");
         HTTPTestTools.checkAtUrlByPost(url, "language=en&text=a test", map);
@@ -131,27 +133,27 @@ public class HTTPSServerTest {
   private void runTests() throws IOException {
     try {
       String httpPrefix = "http://localhost:" + HTTPTestTools.getDefaultPort() + "/";
-      HTTPTestTools.checkAtUrl(new URL(httpPrefix + "?text=a+test&language=en"));
+      HTTPTestTools.checkAtUrl(Urls.create(httpPrefix + "?text=a+test&language=en", Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS));
       fail("HTTP should not work, only HTTPS");
     } catch (SocketException ignored) {}
 
     String httpsPrefix = "https://localhost:" + HTTPTestTools.getDefaultPort() + "/v2/check";
 
-    String result = HTTPTestTools.checkAtUrl(new URL(httpsPrefix + "?text=a+test.&language=en"));
+    String result = HTTPTestTools.checkAtUrl(Urls.create(httpsPrefix + "?text=a+test.&language=en", Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS));
     assertTrue("Got " + result, result.contains("UPPERCASE_SENTENCE_START"));
 
     StringBuilder longText = new StringBuilder();
     while (longText.length() < 490) {
       longText.append("Run ");
     }
-    String result2 = HTTPTestTools.checkAtUrl(new URL(httpsPrefix + "?text=" + encode(longText.toString()) + "&language=en"));
+    String result2 = HTTPTestTools.checkAtUrl(Urls.create(httpsPrefix + "?text=" + encode(longText.toString()) + "&language=en", Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS));
     assertTrue("Got " + result2, !result2.contains("UPPERCASE_SENTENCE_START"));
     assertTrue("Got " + result2, result2.contains("PHRASE_REPETITION"));
 
     String overlyLongText = longText + " and some more to get over the limit of 500";
     try {
       System.out.println("=== Now checking text that is too long, please ignore the following exception ===");
-      HTTPTestTools.checkAtUrl(new URL(httpsPrefix + "?text=" + encode(overlyLongText) + "&language=en"));
+      HTTPTestTools.checkAtUrl(Urls.create(httpsPrefix + "?text=" + encode(overlyLongText) + "&language=en", Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS));
       fail();
     } catch (IOException expected) {
       if (!expected.toString().contains(" 413 ")) {
@@ -175,7 +177,7 @@ public class HTTPSServerTest {
   private String check(String langCode, String text) throws IOException {
     String urlOptions = "/v2/check?language=" + langCode;
     urlOptions += "&disabledRules=HUNSPELL_RULE&text=" + URLEncoder.encode(text, "UTF-8"); // latin1 is not enough for languages like polish, romanian, etc
-    URL url = new URL("https://localhost:" + HTTPTestTools.getDefaultPort() + urlOptions);
+    URL url = Urls.create("https://localhost:" + HTTPTestTools.getDefaultPort() + urlOptions, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
     return HTTPTestTools.checkAtUrl(url);
   }
 

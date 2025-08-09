@@ -18,6 +18,8 @@
  */
 package org.languagetool.dev.wikipedia;
 
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -87,7 +89,7 @@ public class WikipediaQuickCheck {
     String pageTitle = getPageTitle(wikipediaUrl);
     String apiUrl = "https://" + lang.getShortCode() + ".wikipedia.org/w/api.php?titles=" 
             + URLEncoder.encode(pageTitle, "utf-8") + "&action=query&prop=revisions&rvprop=content|timestamp&format=xml";
-    return getContent(new URL(apiUrl));
+    return getContent(Urls.create(apiUrl, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS));
   }
 
   public Language getLanguage(URL url) {
@@ -294,7 +296,7 @@ public class WikipediaQuickCheck {
     //String urlString = "https://de.wikipedia.org/wiki/Benutzer_Diskussion:Dnaber";
     //String urlString = "https://secure.wikimedia.org/wikipedia/de/wiki/Gütersloh";
     String urlString = args[0];
-    MarkupAwareWikipediaResult result = check.checkPage(new URL(urlString), new ErrorMarker("***", "***"));
+    MarkupAwareWikipediaResult result = check.checkPage(Urls.create(urlString, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS), new ErrorMarker("***", "***"));
     int errorCount = 0;
     for (AppliedRuleMatch match : result.getAppliedRuleMatches()) {
       RuleMatchApplication matchApplication = match.getRuleMatchApplications().get(0);

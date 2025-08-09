@@ -21,6 +21,8 @@
 
 package org.languagetool.rules;
 
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -371,7 +373,7 @@ public abstract class GRPCRule extends RemoteRule {
           message, shortMessage);
         if (!match.getUrl().isEmpty()) {
           try {
-            m.setUrl(new URL(match.getUrl()));
+            m.setUrl(Urls.create(match.getUrl(), Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS));
           } catch (MalformedURLException e) {
             logger.warn("Got invalid URL from GRPC rule {}: {}", this, e);
           }

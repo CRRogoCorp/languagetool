@@ -19,6 +19,8 @@
 package org.languagetool.server;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -64,7 +66,7 @@ public class LanguageIdentificationTest {
   private String check(String text) throws IOException {
     String urlOptions = "/v2/check?language=auto";
     urlOptions += "&text=" + URLEncoder.encode(text, "UTF-8");
-    URL url = new URL("http://localhost:" + HTTPTestTools.getDefaultPort() + urlOptions);
+    URL url = Urls.create("http://localhost:" + HTTPTestTools.getDefaultPort() + urlOptions, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
     return HTTPTestTools.checkAtUrl(url);
   }
 

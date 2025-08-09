@@ -18,6 +18,8 @@
  */
 package org.languagetool.openoffice;
 
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -93,7 +95,7 @@ class LORemoteLanguageTool {
     username = config.getRemoteUsername();
     apiKey = config.getRemoteApiKey();
     isPremium = username != null && apiKey != null && config.isPremium();
-    URL serverBaseUrl = new URL(serverUrl == null ? (isPremium ? PREMIUM_SERVER_URL : SERVER_URL) : serverUrl);
+    URL serverBaseUrl = Urls.create(serverUrl == null ? (isPremium ? PREMIUM_SERVER_URL : SERVER_URL) : serverUrl, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
     remoteLanguageTool = new RemoteLanguageTool(serverBaseUrl);
     try {
       String urlParameters = "language=" + language.getShortCodeWithCountryAndVariant();
@@ -394,7 +396,7 @@ class LORemoteLanguageTool {
         remoteMatch.getErrorOffset() + remoteMatch.getErrorLength() + nOffset, remoteMatch.getMessage(), 
         remoteMatch.getShortMessage().isPresent() ? remoteMatch.getShortMessage().get() : null);
     if (remoteMatch.getUrl().isPresent()) {
-      ruleMatch.setUrl(new URL(remoteMatch.getUrl().get()));
+      ruleMatch.setUrl(Urls.create(remoteMatch.getUrl().get(), Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS));
     }
     List<String> replacements = null;
     if (remoteMatch.getReplacements().isPresent()) {
