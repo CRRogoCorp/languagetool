@@ -18,6 +18,8 @@
  */
 package org.languagetool.gui;
 
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import org.apache.commons.lang3.StringUtils;
 import org.languagetool.JLanguageTool;
 import org.languagetool.rules.*;
@@ -237,7 +239,7 @@ public final class Tools {
    */
   public static void openURL(String url) {
     try {
-      openURL(new URL(url));
+      openURL(Urls.create(url, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS));
     } catch (MalformedURLException ex) {
       Tools.showError(ex);
     }

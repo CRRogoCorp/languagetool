@@ -18,6 +18,8 @@
  */
 package org.languagetool.rules.patterns;
 
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import org.apache.commons.lang3.ObjectUtils;
 import org.languagetool.Languages;
 import org.languagetool.ResourceBundleTools;
@@ -856,7 +858,7 @@ public class PatternRuleHandler extends XMLRuleHandler {
   private URL internUrl(String s) throws MalformedURLException {
     URL url = internedUrls.get(s);
     if (url == null) {
-      url = new URL(s);
+      url = Urls.create(s, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
       internedUrls.put(s, url);
     }
     return url;

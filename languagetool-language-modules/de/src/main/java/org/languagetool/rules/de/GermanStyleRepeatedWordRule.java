@@ -18,6 +18,8 @@
  */
 package org.languagetool.rules.de;
 
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -259,9 +261,9 @@ public class GermanStyleRepeatedWordRule extends AbstractStyleRepeatedWordRule {
         }
       }
       if (lemmas.size() == 1) {
-        return new URL(SYNONYMS_URL + lemmas.get(0));
+        return Urls.create(SYNONYMS_URL + lemmas.get(0), Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
       }
-      return new URL(SYNONYMS_URL + token.getToken());
+      return Urls.create(SYNONYMS_URL + token.getToken(), Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
     }
     return null;
   }

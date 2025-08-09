@@ -18,6 +18,8 @@
  */
 package org.languagetool.server;
 
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -160,7 +162,7 @@ public class HTTPServerTest {
     // test http POST
     assertTrue(checkByPOST(new Romanian(), "greșit greșit").contains("greșit"));
     // test supported language listing
-    URL url = new URL("http://localhost:" + HTTPTestTools.getDefaultPort() + "/v2/languages");
+    URL url = Urls.create("http://localhost:" + HTTPTestTools.getDefaultPort() + "/v2/languages", Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
     String languagesJson = StringTools.streamToString((InputStream) url.getContent(), "UTF-8");
     if (!languagesJson.contains("Romanian") || !languagesJson.contains("English")) {
       fail("Error getting supported languages: " + languagesJson);
@@ -347,7 +349,7 @@ public class HTTPServerTest {
     HTTPServer server = new HTTPServer(config, false);
     try {
       server.run();
-      URL url = new URL("http://localhost:<PORT>/v2/healthcheck".replace("<PORT>", String.valueOf(HTTPTestTools.getDefaultPort())));
+      URL url = Urls.create("http://localhost:<PORT>/v2/healthcheck".replace("<PORT>", String.valueOf(HTTPTestTools.getDefaultPort())), Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
       InputStream stream = (InputStream)url.getContent();
       String response = StringTools.streamToString(stream, "UTF-8");
       assertThat(response, is("OK"));
@@ -391,7 +393,7 @@ public class HTTPServerTest {
       server.run();
       try {
         System.out.println("=== Testing 'enabledOnly parameter' now, please ignore the following exception ===");
-        URL url = new URL("http://localhost:" + HTTPTestTools.getDefaultPort() + "/?text=foo&language=en-US&disabled=EN_A_VS_AN&enabledOnly=yes");
+        URL url = Urls.create("http://localhost:" + HTTPTestTools.getDefaultPort() + "/?text=foo&language=en-US&disabled=EN_A_VS_AN&enabledOnly=yes", Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
         HTTPTestTools.checkAtUrl(url);
         fail();
       } catch (IOException expected) {
@@ -412,7 +414,7 @@ public class HTTPServerTest {
     HTTPServer server = new HTTPServer(config, false);
     try {
       server.run();
-      HTTPTestTools.checkAtUrl(new URL("http://localhost:" + HTTPTestTools.getDefaultPort() + prefix + "v2/check?text=Test&language=en"));
+      HTTPTestTools.checkAtUrl(Urls.create("http://localhost:" + HTTPTestTools.getDefaultPort() + prefix + "v2/check?text=Test&language=en", Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS));
     } finally {
       server.stop();
     }
@@ -425,7 +427,7 @@ public class HTTPServerTest {
       server.run();
       try {
         System.out.println("=== Testing 'missing language parameter' now, please ignore the following exception ===");
-        URL url = new URL("http://localhost:" + HTTPTestTools.getDefaultPort() + "/?text=foo");
+        URL url = Urls.create("http://localhost:" + HTTPTestTools.getDefaultPort() + "/?text=foo", Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
         HTTPTestTools.checkAtUrl(url);
         fail();
       } catch (IOException expected) {
@@ -473,7 +475,7 @@ public class HTTPServerTest {
       urlOptions += "&motherTongue=" + motherTongue.getShortCode();
     }
     urlOptions += parameters;
-    URL url = new URL("http://localhost:" + HTTPTestTools.getDefaultPort() + urlOptions);
+    URL url = Urls.create("http://localhost:" + HTTPTestTools.getDefaultPort() + urlOptions, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
     return HTTPTestTools.checkAtUrl(url);
   }
 
@@ -493,7 +495,7 @@ public class HTTPServerTest {
     if (useEnabledOnly) {
       urlOptions += "&enabledOnly=yes";
     }
-    URL url = new URL("http://localhost:" + HTTPTestTools.getDefaultPort() + urlOptions);
+    URL url = Urls.create("http://localhost:" + HTTPTestTools.getDefaultPort() + urlOptions, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
     return HTTPTestTools.checkAtUrl(url);
   }
 
@@ -509,7 +511,7 @@ public class HTTPServerTest {
    */
   String checkByPOST(String langCode, String text) throws IOException {
     String postData = "language=" + langCode + "&text=" + URLEncoder.encode(text, "UTF-8"); // latin1 is not enough for languages like Polish, Romanian, etc
-    URL url = new URL(LOAD_TEST_URL.replace("<PORT>", String.valueOf(HTTPTestTools.getDefaultPort())));
+    URL url = Urls.create(LOAD_TEST_URL.replace("<PORT>", String.valueOf(HTTPTestTools.getDefaultPort())), Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
     try {
       return HTTPTestTools.checkAtUrlByPost(url, postData);
     } catch (IOException e) {

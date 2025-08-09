@@ -18,6 +18,8 @@
  */
 package org.languagetool.server;
 
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.languagetool.Language;
@@ -74,7 +76,7 @@ public class HTTPServerOverheadTest {
 
   private String checkTextOnServer(Language lang, String text) throws IOException {
     String postData = "language=" + lang.getShortCodeWithCountryAndVariant() + "&text=" + URLEncoder.encode(text, "UTF-8");
-    URL url = new URL("http://localhost:" + HTTPTestTools.getDefaultPort() + "/v2/check");
+    URL url = Urls.create("http://localhost:" + HTTPTestTools.getDefaultPort() + "/v2/check", Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
     return HTTPTestTools.checkAtUrlByPost(url, postData);
   }
 

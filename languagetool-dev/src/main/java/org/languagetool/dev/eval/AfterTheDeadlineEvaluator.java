@@ -18,6 +18,8 @@
  */
 package org.languagetool.dev.eval;
 
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import org.languagetool.JLanguageTool;
 import org.languagetool.Language;
 import org.languagetool.Languages;
@@ -102,7 +104,7 @@ class AfterTheDeadlineEvaluator {
   private boolean queryAtDServer(IncorrectExample example) {
     String sentence = ExampleSentence.cleanMarkersInExample(example.getExample());
     try {
-      URL url = new URL(urlPrefix + URLEncoder.encode(sentence, "UTF-8"));
+      URL url = Urls.create(urlPrefix + URLEncoder.encode(sentence, "UTF-8"), Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
       String result = getContent(url);
       if (isExpectedErrorFound(example, result)) {
         return true;
